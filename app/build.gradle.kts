@@ -35,7 +35,7 @@ android {
 dependencies {
 
     // Dependências do Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
 
     // Dependências específicas do Firebase
     implementation("com.google.firebase:firebase-analytics")
