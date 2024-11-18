@@ -1,5 +1,6 @@
 package com.example.olx_clone.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +49,8 @@ public class CadastroActivity extends AppCompatActivity {
 
         inicializaComponentes();
 
+        autenticacao = FirebaseAuth.getInstance();
+
         buttonAcesso.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,50 +59,51 @@ public class CadastroActivity extends AppCompatActivity {
 
                 // Adicione a lógica para login/cadastro aqui
 
-                if( !email.isEmpty() ){
-                    if( !senha.isEmpty() ){
+                if (!email.isEmpty()) {
+                    if (!senha.isEmpty()) {
 
-                        //Verifica estado do switch
-                        if( tipoAcesso.isChecked() ){//Cadastro
+                        // Verifica estado do switch
+                        if (tipoAcesso.isChecked()) { // Cadastro
 
                             autenticacao.createUserWithEmailAndPassword(
                                     email, senha
                             ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if( task.isSuccessful() ){
+                                    if (task.isSuccessful()) {
 
                                         Toast.makeText(CadastroActivity.this,
                                                 "Cadastro realizado com sucesso!",
                                                 Toast.LENGTH_SHORT).show();
 
-                                        //Direcionar para a tela principal do App
+                                        // Direcionar para a tela principal do App
+                                        startActivity(new Intent(getApplicationContext(), AnunciosActivity.class));
 
-                                    }else {
+                                    } else {
 
                                         String erroExcecao = "";
 
-                                        try{
+                                        try {
                                             throw task.getException();
-                                        }catch (FirebaseAuthWeakPasswordException e){
+                                        } catch (FirebaseAuthWeakPasswordException e) {
                                             erroExcecao = "Digite uma senha mais forte!";
-                                        }catch (FirebaseAuthInvalidCredentialsException e){
+                                        } catch (FirebaseAuthInvalidCredentialsException e) {
                                             erroExcecao = "Por favor, digite um e-mail válido";
-                                        }catch (FirebaseAuthUserCollisionException e){
+                                        } catch (FirebaseAuthUserCollisionException e) {
                                             erroExcecao = "Esta conta já foi cadastrada";
                                         } catch (Exception e) {
-                                            erroExcecao = "Erro ao cadastrar usuário: "  + e.getMessage();
+                                            erroExcecao = "Erro ao cadastrar usuário: " + e.getMessage();
                                             e.printStackTrace();
                                         }
 
                                         Toast.makeText(CadastroActivity.this,
-                                                "Erro: " + erroExcecao ,
+                                                "Erro: " + erroExcecao,
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
 
-                        }else {//Login
+                        } else { // Login
 
                             autenticacao.signInWithEmailAndPassword(
                                     email, senha
@@ -107,15 +111,16 @@ public class CadastroActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                    if( task.isSuccessful() ){
+                                    if (task.isSuccessful()) {
 
                                         Toast.makeText(CadastroActivity.this,
                                                 "Logado com sucesso",
                                                 Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), AnunciosActivity.class));
 
-                                    }else {
+                                    } else {
                                         Toast.makeText(CadastroActivity.this,
-                                                "Erro ao fazer login: " + task.getException() ,
+                                                "Erro ao fazer login: " + task.getException(),
                                                 Toast.LENGTH_SHORT).show();
                                     }
 
@@ -124,12 +129,12 @@ public class CadastroActivity extends AppCompatActivity {
 
                         }
 
-                    }else {
+                    } else {
                         Toast.makeText(CadastroActivity.this,
                                 "Preencha a senha!",
                                 Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
                     Toast.makeText(CadastroActivity.this,
                             "Preencha o E-mail!",
                             Toast.LENGTH_SHORT).show();
@@ -163,3 +168,7 @@ public class CadastroActivity extends AppCompatActivity {
         autenticacao = FirebaseAuth.getInstance();
     }
 }
+
+
+
+// autenticacao = FirebaseAuth.getInstance();

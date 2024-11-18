@@ -2,17 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/group_logado">
+    <group android:id="@+id/group_logado" android:visible="false">
 
         <item android:id="@+id/menu_anuncios"
-            android:title="Meus anúncios" />
+            android:title="Meus anúncios"
+            app:showAsAction="never" />
 
         <item android:id="@+id/menu_sair"
-            android:title="Sair" />
+            android:title="Sair"
+            app:showAsAction="never" />
 
     </group>
 
-    <group android:id="@+id/group_deslogado">
+    <group android:id="@+id/group_deslogado" android:visible="false">
 
         <item android:id="@+id/menu_cadastrar"
             android:title="Cadastrar/ Entrar"
