@@ -50,4 +50,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Dependencias Para interface dos Meu Anuncios
+    implementation ("com.google.android.material:material:1.7.0")
 }

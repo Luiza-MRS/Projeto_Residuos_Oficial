@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">olx_clone</string>
+    <string name="add_new_item">Adicionar Novo Item</string>
 </resources>

@@ -72,5 +72,8 @@ public class AnunciosActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+        // case R.id.menu_anuncios :
+
+        //break;
     }
 }
