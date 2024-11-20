@@ -70,7 +70,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editTextText"
+            android:id="@+id/editTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -79,16 +79,16 @@
             android:padding="10dp" />
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/editValor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Valor"
-            android:inputType="text"
+            android:hint="R$ 0,00"
+            android:inputType="numberDecimal"
             android:padding="10dp" />
 
         <EditText
-            android:id="@+id/editTextText3"
+            android:id="@+id/editDescricao"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_marginBottom="16dp"
@@ -97,10 +97,12 @@
             android:padding="10dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/cadastroAnuncio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="salvarAnuncio"
             android:text="Cadastrar Anuncio"
             app:layout_constraintBottom_toBottomOf="parent" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
