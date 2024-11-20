@@ -17,9 +17,11 @@
         android:theme="@style/Theme.Olx_clone"
         tools:targetApi="31">
         <activity
-            android:name=".activity.MeusAnunciosActivity"
+            android:name=".activity.CadastrarAnuncioActivity"
             android:exported="false" />
-        <!-- AnunciosActivity será a atividade inicial -->
+        <activity
+            android:name=".activity.MeusAnunciosActivity"
+            android:exported="false" /> <!-- AnunciosActivity será a atividade inicial -->
         <activity
             android:name=".activity.AnunciosActivity"
             android:exported="true">
