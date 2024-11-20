@@ -40,10 +40,10 @@ public class MeusAnunciosActivity extends AppCompatActivity {
 
         // Configurar o Floating Action Button
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
+        fab.setOnClickListener( view -> {
             // Ação ao clicar no FAB
             Toast.makeText(MeusAnunciosActivity.this, "FAB Clicked", Toast.LENGTH_SHORT).show();
-            // Adicione aqui a lógica para a nova ação, por exemplo, abrir uma nova Activity
+            startActivity(new Intent(getApplicationContext(),CadastrarAnuncioActivity.class));
         });
     }
 

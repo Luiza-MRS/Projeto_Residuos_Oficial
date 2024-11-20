@@ -67,7 +67,8 @@ public class AnunciosActivity extends AppCompatActivity {
             invalidateOptionsMenu();
             return true;
         } else if (id == R.id.menu_anuncios) {
-            startActivity(new Intent(getApplicationContext(), AnunciosActivity.class));
+            //linha responsavel pela troca de interface (tela inicial -> Meus Anuncios)
+            startActivity(new Intent(getApplicationContext(), MeusAnunciosActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
