@@ -18,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -34,10 +36,13 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
 
     private EditText campoTitulo, campoDescricao, campoValor, campoTelefone;
     private ImageView imagem1, imagem2, imagem3;
-    private String[] permissoes = new String[]{
+    private final String[] permissoes = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
     };
-    private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private final List<String> listaFotosRecuperadas = new ArrayList<>();
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private int requestCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,51 +61,51 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
 
         // Adicionar TextWatcher para formatar o telefone
         adicionarTextWatcherTelefone();
+
+        // Inicializar ActivityResultLauncher
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.getData() != null) {
+                            Uri imagemSelecionada = data.getData();
+                            String caminhoImagem = imagemSelecionada.toString();
+
+                            // Configura imagem no ImageView
+                            if (requestCode == 1) {
+                                imagem1.setImageURI(imagemSelecionada);
+                            } else if (requestCode == 2) {
+                                imagem2.setImageURI(imagemSelecionada);
+                            } else if (requestCode == 3) {
+                                imagem3.setImageURI(imagemSelecionada);
+                            }
+
+                            listaFotosRecuperadas.add(caminhoImagem);
+                        }
+                    }
+                }
+        );
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageCadastro1:
-                escolherImagem(1);
-                break;
-            case R.id.imageCadastro2:
-                escolherImagem(2);
-                break;
-            case R.id.imageCadastro3:
-                escolherImagem(3);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + v.getId());
+        int id = v.getId();
+        if (id == R.id.imageCadastro1) {
+            escolherImagem(1);
+        } else if (id == R.id.imageCadastro2) {
+            escolherImagem(2);
+        } else if (id == R.id.imageCadastro3) {
+            escolherImagem(3);
+        } else {
+            throw new IllegalStateException("Unexpected value: " + id);
         }
     }
 
     public void escolherImagem(int requestCode) {
+        this.requestCode = requestCode;
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, requestCode);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            // Recuperar imagem
-            Uri imagemSelecionada = data.getData();
-            String caminhoImagem = imagemSelecionada.toString();
-
-            // Configura imagem no ImageView
-            if (requestCode == 1) {
-                imagem1.setImageURI(imagemSelecionada);
-            } else if (requestCode == 2) {
-                imagem2.setImageURI(imagemSelecionada);
-            } else if (requestCode == 3) {
-                imagem3.setImageURI(imagemSelecionada);
-            }
-
-            listaFotosRecuperadas.add(caminhoImagem);
-        }
+        activityResultLauncher.launch(i);
     }
 
     private void inicializarComponentes() {
@@ -132,12 +137,7 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         builder.setTitle("Permissões Negadas");
         builder.setMessage("Para utilizar o app é necessário aceitar as permissões");
         builder.setCancelable(false);
-        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+        builder.setPositiveButton("Confirmar", (dialog, which) -> finish());
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -158,10 +158,10 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
                 if (!s.toString().equals(current)) {
                     campoTelefone.removeTextChangedListener(this);
 
-                    String cleanString = s.toString().replaceAll("[^\\d]", "");
+                    String cleanString = s.toString().replaceAll("\\D", "");
                     StringBuilder formatted = new StringBuilder();
 
-                    if (cleanString.length() > 0) {
+                    if (!cleanString.isEmpty()) {
                         formatted.append("(").append(cleanString.substring(0, Math.min(cleanString.length(), 2)));
                     }
 
@@ -179,7 +179,7 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
 
                     current = formatted.toString();
                     campoTelefone.setText(current);
-                    campoTelefone.setSelection(isDeleting ? current.length() : current.length());
+                    campoTelefone.setSelection(current.length());
 
                     campoTelefone.addTextChangedListener(this);
                 }
