@@ -227,50 +227,53 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         });
     }
 
-    public void validarDadosAnuncio(View view) {
+//Parte responsavel por validar o anuncio, conferindo se o usuario inseriu os dados em seu respectivos campos
+    public void validarDadosAnuncio(View view){
         String fone = "";
         String estado = campoEstado.getSelectedItem().toString();
         String categoria = campoCategoria.getSelectedItem().toString();
         String titulo = campoTitulo.getText().toString();
         String valor = campoValor.getText().toString();
         String telefone = campoTelefone.getText().toString();
-        if (campoTelefone.getText() != null) {
+        if( campoTelefone.getText() != null ){
             fone = campoTelefone.getText().toString();
         }
         String descricao = campoDescricao.getText().toString();
 
-        if (listaFotosRecuperadas.size() != 0) {
-            if (!estado.isEmpty() && !estado.equals("Estados")) {
-                if (!categoria.isEmpty() && !categoria.equals("Categorias")) {
-                    if (!titulo.isEmpty()) {
-                        if (!valor.isEmpty() && !valor.equals("0")) {
-                            if (!telefone.isEmpty() && fone.length() >= 10) {
-                                if (!descricao.isEmpty()) {
+        if( listaFotosRecuperadas.size() != 0 ){
+            if (!estado.equals("Estados") ){
+                if (!categoria.equals("Categorias") ){
+                    if( !titulo.isEmpty() ){
+                        if( !valor.isEmpty() && !valor.equals("0") ){
+                            if( !telefone.isEmpty() && fone.length() >=10 ){
+                                if( !descricao.isEmpty() ){
                                     salvarAnuncio();
-                                } else {
+                                }else {
                                     exibirMensagemErro("Preencha o campo Descrição!");
                                 }
-                            } else {
+                            }else {
                                 exibirMensagemErro("Preencha o campo Telefone, digite ao menos 10 números!");
                             }
-                        } else {
-                            exibirMensagemErro("Preencha o campo Valor!");
+                        }else {
+                            exibirMensagemErro("Preencha o campo Valor, numero maior que 0!");
                         }
-                    } else {
-                        exibirMensagemErro("Preencha o campo Título!");
+                    }else {
+                        exibirMensagemErro("Preencha o campo título!");
                     }
-                } else {
-                    exibirMensagemErro("Preencha o campo Categoria!");
+                }else {
+                    exibirMensagemErro("Preencha o campo categoria!");
                 }
-            } else {
-                exibirMensagemErro("Preencha o campo Estado!");
+            }else {
+                exibirMensagemErro("Preencha o campo estado!");
             }
-        } else {
+        }else {
             exibirMensagemErro("Selecione ao menos uma foto!");
         }
+
     }
 
-    private void exibirMensagemErro(String s) {
+    private void exibirMensagemErro(String mensagem){
+        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
     }
 
     public void salvarAnuncio() {
