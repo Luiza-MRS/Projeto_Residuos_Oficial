@@ -57,14 +57,14 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
+                android:id="@+id/spinnerEstado"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <Spinner
-                android:id="@+id/spinner2"
-                android:layout_width="match_parent"
+                android:id="@+id/spinnerCategoria"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
         </LinearLayout>
@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Titulo"
+            android:hint="Título"
             android:inputType="text"
             android:padding="10dp" />
 
@@ -109,8 +109,8 @@
             android:id="@+id/cadastroAnuncio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="salvarAnuncio"
-            android:text="Cadastrar Anuncio"
+            android:onClick="validarDadosAnuncio"
+            android:text="Cadastrar Anúncio"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </LinearLayout>

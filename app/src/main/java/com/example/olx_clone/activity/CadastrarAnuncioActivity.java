@@ -1,7 +1,6 @@
 package com.example.olx_clone.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -14,10 +13,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -33,17 +36,23 @@ import java.util.List;
 public class CadastrarAnuncioActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText campoTitulo, campoDescricao, campoValor, campoTelefone;
+    private Spinner campoEstado, campoCategoria;
     private ImageView imagem1, imagem2, imagem3;
-    private String[] permissoes = new String[]{
+    private final String[] permissoes = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
     };
-    private List<String> listaFotosRecuperadas = new ArrayList<>();
+    private final List<String> listaFotosRecuperadas = new ArrayList<>();
+
+    private ActivityResultLauncher<Intent> activityResultLauncher;
+    private int requestCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastrar_anuncio);
         inicializarComponentes();
+
+        carregarDadosSpinner();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -56,57 +65,90 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
 
         // Adicionar TextWatcher para formatar o telefone
         adicionarTextWatcherTelefone();
+
+        // Inicializar ActivityResultLauncher
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        if (data != null && data.getData() != null) {
+                            Uri imagemSelecionada = data.getData();
+                            String caminhoImagem = imagemSelecionada.toString();
+
+                            // Configura imagem no ImageView
+                            if (requestCode == 1) {
+                                imagem1.setImageURI(imagemSelecionada);
+                            } else if (requestCode == 2) {
+                                imagem2.setImageURI(imagemSelecionada);
+                            } else if (requestCode == 3) {
+                                imagem3.setImageURI(imagemSelecionada);
+                            }
+
+                            listaFotosRecuperadas.add(caminhoImagem);
+                        }
+                    }
+                }
+        );
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.imageCadastro1:
-                escolherImagem(1);
-                break;
-            case R.id.imageCadastro2:
-                escolherImagem(2);
-                break;
-            case R.id.imageCadastro3:
-                escolherImagem(3);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + v.getId());
+        int id = v.getId();
+        if (id == R.id.imageCadastro1) {
+            escolherImagem(1);
+        } else if (id == R.id.imageCadastro2) {
+            escolherImagem(2);
+        } else if (id == R.id.imageCadastro3) {
+            escolherImagem(3);
+        } else {
+            throw new IllegalStateException("Unexpected value: " + id);
         }
     }
 
     public void escolherImagem(int requestCode) {
+        this.requestCode = requestCode;
         Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, requestCode);
+        activityResultLauncher.launch(i);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void carregarDadosSpinner() {
+        // Configura spinner de estados
+        String[] estados = getResources().getStringArray(R.array.estados);
+        List<String> listaEstados = new ArrayList<>();
+        listaEstados.add("Estados"); // Título do spinner
+        listaEstados.addAll(List.of(estados));
 
-        if (resultCode == Activity.RESULT_OK) {
-            // Recuperar imagem
-            Uri imagemSelecionada = data.getData();
-            String caminhoImagem = imagemSelecionada.toString();
+        ArrayAdapter<String> adapterEstado = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, listaEstados
+        );
+        adapterEstado.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        campoEstado.setAdapter(adapterEstado);
+        campoEstado.setSelection(0);
 
-            // Configura imagem no ImageView
-            if (requestCode == 1) {
-                imagem1.setImageURI(imagemSelecionada);
-            } else if (requestCode == 2) {
-                imagem2.setImageURI(imagemSelecionada);
-            } else if (requestCode == 3) {
-                imagem3.setImageURI(imagemSelecionada);
-            }
+        // Configura spinner de categorias
+        String[] categorias = getResources().getStringArray(R.array.categorias);
+        List<String> listaCategorias = new ArrayList<>();
+        listaCategorias.add("Categorias"); // Título do spinner
+        listaCategorias.addAll(List.of(categorias));
 
-            listaFotosRecuperadas.add(caminhoImagem);
-        }
+        ArrayAdapter<String> adapterCategoria = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, listaCategorias
+        );
+        adapterCategoria.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        campoCategoria.setAdapter(adapterCategoria);
+        campoCategoria.setSelection(0);
     }
+
+
+
 
     private void inicializarComponentes() {
         campoTitulo = findViewById(R.id.editTitulo);
         campoDescricao = findViewById(R.id.editDescricao);
         campoValor = findViewById(R.id.editValor);
+        campoEstado = findViewById(R.id.spinnerEstado);
+        campoCategoria = findViewById(R.id.spinnerCategoria);
         campoTelefone = findViewById(R.id.editTelefone);
         imagem1 = findViewById(R.id.imageCadastro1);
         imagem2 = findViewById(R.id.imageCadastro2);
@@ -132,12 +174,7 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         builder.setTitle("Permissões Negadas");
         builder.setMessage("Para utilizar o app é necessário aceitar as permissões");
         builder.setCancelable(false);
-        builder.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
+        builder.setPositiveButton("Confirmar", (dialog, which) -> finish());
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -158,10 +195,10 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
                 if (!s.toString().equals(current)) {
                     campoTelefone.removeTextChangedListener(this);
 
-                    String cleanString = s.toString().replaceAll("[^\\d]", "");
+                    String cleanString = s.toString().replaceAll("\\D", "");
                     StringBuilder formatted = new StringBuilder();
 
-                    if (cleanString.length() > 0) {
+                    if (!cleanString.isEmpty()) {
                         formatted.append("(").append(cleanString.substring(0, Math.min(cleanString.length(), 2)));
                     }
 
@@ -179,7 +216,7 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
 
                     current = formatted.toString();
                     campoTelefone.setText(current);
-                    campoTelefone.setSelection(isDeleting ? current.length() : current.length());
+                    campoTelefone.setSelection(current.length());
 
                     campoTelefone.addTextChangedListener(this);
                 }
@@ -190,7 +227,53 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         });
     }
 
-    public void salvarAnuncio(View view) {
+    public void validarDadosAnuncio(View view) {
+        String fone = "";
+        String estado = campoEstado.getSelectedItem().toString();
+        String categoria = campoCategoria.getSelectedItem().toString();
+        String titulo = campoTitulo.getText().toString();
+        String valor = campoValor.getText().toString();
+        String telefone = campoTelefone.getText().toString();
+        if (campoTelefone.getText() != null) {
+            fone = campoTelefone.getText().toString();
+        }
+        String descricao = campoDescricao.getText().toString();
+
+        if (listaFotosRecuperadas.size() != 0) {
+            if (!estado.isEmpty() && !estado.equals("Estados")) {
+                if (!categoria.isEmpty() && !categoria.equals("Categorias")) {
+                    if (!titulo.isEmpty()) {
+                        if (!valor.isEmpty() && !valor.equals("0")) {
+                            if (!telefone.isEmpty() && fone.length() >= 10) {
+                                if (!descricao.isEmpty()) {
+                                    salvarAnuncio();
+                                } else {
+                                    exibirMensagemErro("Preencha o campo Descrição!");
+                                }
+                            } else {
+                                exibirMensagemErro("Preencha o campo Telefone, digite ao menos 10 números!");
+                            }
+                        } else {
+                            exibirMensagemErro("Preencha o campo Valor!");
+                        }
+                    } else {
+                        exibirMensagemErro("Preencha o campo Título!");
+                    }
+                } else {
+                    exibirMensagemErro("Preencha o campo Categoria!");
+                }
+            } else {
+                exibirMensagemErro("Preencha o campo Estado!");
+            }
+        } else {
+            exibirMensagemErro("Selecione ao menos uma foto!");
+        }
+    }
+
+    private void exibirMensagemErro(String s) {
+    }
+
+    public void salvarAnuncio() {
         String valor = campoValor.getText().toString();
         Log.d("salvar", "salvarAnuncio: " + valor);
 
@@ -203,12 +286,6 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         Log.d("salvar", "Titulo: " + titulo);
         Log.d("salvar", "Descricao: " + descricao);
         Log.d("salvar", "Telefone: " + telefone);
-
-        // Exemplo de lógica adicional para salvar o anúncio
-        // anuncio.setTitulo(titulo);
-        // anuncio.setDescricao(descricao);
-        // anuncio.setValor(valor);
-        // anuncio.setTelefone(telefone);
 
         Toast.makeText(this, "Anúncio salvo!", Toast.LENGTH_SHORT).show();
 
