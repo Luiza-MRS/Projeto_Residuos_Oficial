@@ -257,29 +257,44 @@ public class CadastrarAnuncioActivity extends AppCompatActivity implements View.
         finish();
     }
 
-    private void salvarFotosStorage(String url, int totalFotos, int contador){
-        //criar nó no Storage
-        StorageReference imagemAnuncio = storage.child("imagem")
+    private void salvarFotosStorage(String caminhoImagem, int totalFotos, int contador){
+        // Converter o caminho da imagem de String para Uri
+        Uri uri = Uri.parse(caminhoImagem);  // Aqui você converte a String para Uri
+
+        // Criar nó no Storage
+        final StorageReference imagemAnuncio = storage.child("imagem")
                 .child("anuncio")
                 .child(anuncio.getIdAnuncio())
                 .child("imagem" + contador);
 
-        //Fazer upload do arquivo
-        UploadTask uploadTask = imagemAnuncio.putFile(Uri.parse(url)); // converte a (Url String) para "Uri"
+        // Fazer upload do arquivo
+        UploadTask uploadTask = imagemAnuncio.putFile(uri);  // Agora passando o Uri real
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // Aqui a correção é feita: agora usamos o "taskSnapshot" para obter a URL da imagem
-                taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(uri -> {
-                    // Agora você tem a URL da imagem no Firebase
-                    Log.i("INFO", "URL da imagem: " + uri.toString());
-                });
+                // Agora, após o upload bem-sucedido, você pode pegar a URL de download
+                imagemAnuncio.getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                // Aqui você obtém a URL de download
+                                Log.i("INFO", "URL da imagem: " + uri.toString());
+                                // Agora você pode armazenar essa URL no seu banco de dados ou usá-la como quiser
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Se falhar ao obter a URL
+                                Log.i("INFO", "Falha ao obter a URL de download: " + e.getMessage());
+                            }
+                        });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            //Mensagem de erro para o (Upload)
             public void onFailure(@NonNull Exception e) {
-                exibirMensagemErro("Falha ao fazer upload");
+                // Mensagem de erro no upload
+                exibirMensagemErro("Falha ao fazer upload: " + e.getMessage());
                 Log.i("INFO", "Falha ao fazer upload: " + e.getMessage());
             }
         });
