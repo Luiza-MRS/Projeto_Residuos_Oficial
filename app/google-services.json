@@ -1,13 +1,33 @@
 {
   "project_info": {
-    "project_number": "340257562007",
-    "project_id": "olx-clone-b92a6",
-    "storage_bucket": "olx-clone-b92a6.firebasestorage.app"
+    "project_number": "598914346779",
+    "firebase_url": "https://connectstudy-bd273-default-rtdb.firebaseio.com",
+    "project_id": "connectstudy-bd273",
+    "storage_bucket": "connectstudy-bd273.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:340257562007:android:ea7553eaa7750dcc98b8d2",
+        "mobilesdk_app_id": "1:598914346779:android:386d743414adea71a56dbe",
+        "android_client_info": {
+          "package_name": "com.academy.studyconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJyOnCFdie96PNo8Bd57Ym39bvLa6tlDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598914346779:android:b109644cbf2822e7a56dbe",
         "android_client_info": {
           "package_name": "com.example.olx_clone"
         }
@@ -15,7 +35,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDnJFoxvMaCXf6xcMUbOYqTSiwag39pXPw"
+          "current_key": "AIzaSyAJyOnCFdie96PNo8Bd57Ym39bvLa6tlDI"
         }
       ],
       "services": {
