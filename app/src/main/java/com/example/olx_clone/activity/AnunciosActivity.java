@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,14 +68,17 @@ public class AnunciosActivity extends AppCompatActivity {
             invalidateOptionsMenu();
             return true;
         } else if (id == R.id.menu_anuncios) {
-            //linha responsavel pela troca de interface (tela inicial -> Meus Anuncios)
+            // Linha responsável pela troca de interface (tela inicial -> Meus Anuncios)
             startActivity(new Intent(getApplicationContext(), MeusAnunciosActivity.class));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
-        // case R.id.menu_anuncios :
+    }
 
-        //break;
+    public void abrirAnuncio(View view) {
+        // Redirecionar para a interface do anúncio
+        Intent intent = new Intent(this, CelularActivity.class);
+        startActivity(intent);
     }
 }

@@ -2,6 +2,13 @@
     <string name="app_name"> Ciber Residuos</string>
     <string name="add_new_item">Adicionar Novo Item</string>
     <string name="meus_anuncios">Meus Anúncios</string>
+    <string name="anuncio_titulo">Smart Phone Tela Quebrada</string>
+    <string name="anuncio_valor">R$ 250.00</string>
+    <string name="anuncio_descricao">Celular com tela quebrada, porém seus componentes estão funcionando perfeitamente.</string>
+    <string name="anuncio_image">Imagem do Anúncio</string>
+
+
+
     <string-array name="estados">
         <item>AC</item>
         <item>AL</item>
