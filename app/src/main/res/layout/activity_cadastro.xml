@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#EAF6EA"
     tools:context=".activity.CadastroActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -18,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#087B16"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -29,6 +30,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         android:orientation="vertical"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,19 +53,16 @@
                 app:layout_constraintVertical_bias="0.062"
                 app:srcCompat="@drawable/logo" />
 
-            <EditText
-                android:id="@+id/editCadastroEmail"
-                android:layout_width="230dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="20dp"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
+            <Button
+                android:id="@+id/buttonAcesso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="36dp"
+                android:background="#087B16"
+                android:text="ACESSAR"
+                app:iconTint="#087B16"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.496"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.351" />
+                tools:layout_editor_absoluteX="0dp" />
 
             <EditText
                 android:id="@+id/editCadastroSenha"
@@ -76,7 +75,31 @@
                 app:layout_constraintHorizontal_bias="0.496"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.483" />
+                app:layout_constraintVertical_bias="0.662" />
+
+            <Switch
+                android:id="@+id/switchAcesso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/textView2"
+                tools:layout_editor_absoluteY="504dp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cadastre-se"
+                app:layout_constraintBottom_toBottomOf="@+id/switchAcesso"
+                tools:layout_editor_absoluteX="230dp" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logar"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                app:layout_constraintEnd_toStartOf="@+id/switchAcesso"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -86,36 +109,51 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/buttonAcesso"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.283"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editCadastroSenha">
+                app:layout_constraintTop_toBottomOf="@+id/textView13"
+                app:layout_constraintVertical_bias="0.911">
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Logar" />
-
-                <Switch
-                    android:id="@+id/switchAcesso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cadastre-se" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonAcesso"
-                android:layout_width="match_parent"
+            <EditText
+                android:id="@+id/editCadastroEmail"
+                android:layout_width="230dp"
+                android:layout_height="45dp"
+                android:layout_marginBottom="20dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.496"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.591" />
+
+            <TextView
+                android:id="@+id/Login"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="176dp"
-                android:text="ACESSAR"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:fontFamily="@font/sanchez"
+                android:text="Login"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/editCadastroEmail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                app:layout_constraintVertical_bias="0.102" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="184dp"
+                android:layout_height="48dp"
+                android:text="Faça o login para acessar o taplicativo Recycler Cyber"
+                app:layout_constraintBottom_toTopOf="@+id/editCadastroEmail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Login" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

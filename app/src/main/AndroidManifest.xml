@@ -27,7 +27,7 @@
             android:name=".activity.MeusAnunciosActivity"
             android:exported="false" /> <!-- AnunciosActivity será a atividade inicial -->
         <activity
-            android:name=".activity.AnunciosActivity"
+            android:name=".activity.CadastroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,8 +36,11 @@
             </intent-filter>
         </activity> <!-- CadastroActivity -->
         <activity
-            android:name=".activity.CadastroActivity"
+            android:name=".activity.AnunciosActivity"
             android:exported="true" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
